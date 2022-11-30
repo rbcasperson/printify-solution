@@ -16,20 +16,33 @@ describe('getVendingResult', () => {
     });
   })
 
-  it('should return no change if exact change was provided', () => {
-    // TODO - do this for each possible product
-    expect(getVendingResult('50 50 50 50 20 10 2 1 C')).toEqual({
+  const exactChangeCases = [
+    ["Product A - least coins provided", "50 20 20 5 A", "A"],
+    ["Product A - not least coins provided", "50 20 10 10 5 A", "A"],
+    ["Product B - least coins provided", "50 50 20 5 1 B", "B"],
+    ["Product B - not least coins provided", "50 20 20 20 10 5 1 B", "B"],
+    ["Product C - least coins provided", "50 50 50 50 20 10 2 1 C", "C"],
+    ["Product C - not least coins provided", "50 50 50 50 20 5 5 2 1 C", "C"],
+  ]
+  it.each(exactChangeCases)("should return no change if exact change was provided: %p", (testCaseDescription: string, command: string, expectedProduct: string) => {
+    expect(getVendingResult(command)).toEqual({
       change: null,
-      product: 'C',
+      product: expectedProduct,
     });
-  });
+  })
 
-  it('should return the exact change given, if not enough money was given to buy the product', () => {
-    expect(getVendingResult('50 10 10 A')).toEqual({
-      change: '50 10 10',
+
+  const insufficientMoneyCases = [
+    ["Least coins provided", "20 10 5 A", "20 10 5"],
+    ["Not least coins provided", "50 10 10 A", "50 10 10"]
+  ]
+  it.each(insufficientMoneyCases)("should return the exact change given, if not enough money was given to buy the product: %p", (testCaseDescription: string, command: string, expectedChange: string) => {
+    expect(getVendingResult(command)).toEqual({
+      change: expectedChange,
       product: null,
     });
-  });
+  })
+
 
   // Command Validation
   const invalidCommands = [
