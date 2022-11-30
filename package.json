@@ -1,0 +1,27 @@
+{
+  "name": "pfy-coding-public",
+  "version": "0.0.1",
+  "description": "Coding task",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "jest --watch",
+    "task": "ts-node --transpile-only task-generator.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^26.0.14",
+    "@types/mkdirp": "^1.0.2",
+    "@types/node": "^14.11.2",
+    "@types/rimraf": "^3.0.2",
+    "jest": "^26.5.0",
+    "libzip": "^1.0.8",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^26.4.1",
+    "ts-node": "^10.5.0",
+    "type-flag": "^2.1.0",
+    "typescript": "^4.3.5"
+  },
+  "private": true,
+  "dependencies": {}
+}
