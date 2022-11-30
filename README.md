@@ -11,11 +11,10 @@ Run the following command with the key provided
 
 Find task instructions in generated `src/README.md` file
 
-
-
 ## Development
 
 Prepare `src` folder with the following structure
+
 ```
 index.ts
 index.spec.ts

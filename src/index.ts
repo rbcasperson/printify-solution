@@ -2,73 +2,75 @@ const products: { [product: string]: number } = {
   A: 0.95,
   B: 1.26,
   C: 2.33,
-}
+};
 
-const validCoinValues: number[] = [50, 20, 10, 5, 2, 1]
+const validCoinValues: number[] = [50, 20, 10, 5, 2, 1];
 
 const validateCommand = (command: string): [string, string[]] => {
-  const parts = command.split(" ")
+  const parts = command.split(" ");
   // Last character needs to be in Products
-  const product = parts[parts.length - 1]
-  const productIsValid = Object.keys(products).includes(product)
+  const product = parts[parts.length - 1];
+  const productIsValid = Object.keys(products).includes(product);
   if (!productIsValid) {
-    throw new Error(`Invalid product: '${product}'`)
+    throw new Error(`Invalid product: '${product}'`);
   }
   // At least one valid coin at the beginning
-  const coins = parts.slice(0, -1)
+  const coins = parts.slice(0, -1);
   for (const coin of coins) {
-    const coinInt = parseInt(coin)
+    const coinInt = parseInt(coin);
     if (isNaN(coinInt)) {
-      throw new Error(`Coin value is not an integer: '${coin}'`)
+      throw new Error(`Coin value is not an integer: '${coin}'`);
     }
-    const coinIsValid = validCoinValues.includes(coinInt)
+    const coinIsValid = validCoinValues.includes(coinInt);
     if (!coinIsValid) {
-      throw new Error(`Coin value is not a valid number: '${coin}'`)
+      throw new Error(`Coin value is not a valid number: '${coin}'`);
     }
   }
-  return [product, coins]
-}
+  return [product, coins];
+};
 
 const calculateChangeDue = (changeDue: number): string | null => {
-  let remainingChangeDue = changeDue
-  let coinsForChange: number[] = []
+  let remainingChangeDue = changeDue;
+  let coinsForChange: number[] = [];
   // Ensure they are ordered from highest to lowest
-  validCoinValues.sort(function (a, b) { return b - a; })
+  validCoinValues.sort(function (a, b) {
+    return b - a;
+  });
   for (const coinValue of validCoinValues) {
-    let coinValueDecimal = parseFloat((coinValue / 100).toFixed(2))
+    let coinValueDecimal = parseFloat((coinValue / 100).toFixed(2));
     while (remainingChangeDue >= coinValueDecimal) {
-      coinsForChange.push(coinValue)
-      remainingChangeDue -= coinValueDecimal
-      remainingChangeDue = parseFloat(remainingChangeDue.toFixed(2))
+      coinsForChange.push(coinValue);
+      remainingChangeDue -= coinValueDecimal;
+      remainingChangeDue = parseFloat(remainingChangeDue.toFixed(2));
     }
   }
 
-  const changeStr = coinsForChange.join(" ")
-  return changeStr ? changeStr : null
-}
+  const changeStr = coinsForChange.join(" ");
+  return changeStr ? changeStr : null;
+};
 
 export function getVendingResult(command: string): {
   change: string | null;
   product: string | null;
 } {
-  const [product, coins] = validateCommand(command)
+  const [product, coins] = validateCommand(command);
 
-  let totalMoneyGiven: number = 0
+  let totalMoneyGiven: number = 0;
   for (const coin of coins) {
-    totalMoneyGiven += parseInt(coin) / 100
+    totalMoneyGiven += parseInt(coin) / 100;
   }
-  totalMoneyGiven = parseFloat(totalMoneyGiven.toFixed(2))
-  const priceOfProduct: number = products[product]
+  totalMoneyGiven = parseFloat(totalMoneyGiven.toFixed(2));
+  const priceOfProduct: number = products[product];
 
   // If not enough money was given, return the exact coins that were given
   // and not necessarily the least amount of coins of the same amount.
-  let insufficientMoney: boolean = totalMoneyGiven < priceOfProduct
+  let insufficientMoney: boolean = totalMoneyGiven < priceOfProduct;
   if (insufficientMoney) {
-    return { change: coins.join(" "), product: null }
+    return { change: coins.join(" "), product: null };
   }
 
-  const amountDue = parseFloat((totalMoneyGiven - priceOfProduct).toFixed(2))
-  const change = calculateChangeDue(amountDue)
+  const amountDue = parseFloat((totalMoneyGiven - priceOfProduct).toFixed(2));
+  const change = calculateChangeDue(amountDue);
 
   return { change, product };
 }
