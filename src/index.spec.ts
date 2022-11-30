@@ -52,6 +52,7 @@ describe("getVendingResult", () => {
   const insufficientMoneyCases = [
     ["Least coins provided", "20 10 5 A", "20 10 5"],
     ["Not least coins provided", "50 10 10 A", "50 10 10"],
+    ["No coins provided", "A", ""],
   ];
   it.each(insufficientMoneyCases)(
     "should return the exact change given, if not enough money was given to buy the product: %p",
