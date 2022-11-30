@@ -20,7 +20,7 @@ const validateCommand = (command: string) => {
   for (const coin of coins) {
     const coinInt = parseInt(coin)
     if (isNaN(coinInt)) {
-      throw new Error(`Coin value is not a number: '${coin}'`)
+      throw new Error(`Coin value is not an integer: '${coin}'`)
     }
     const coinIsValid = validCoinValues.includes(coinInt)
     if (!coinIsValid) {
