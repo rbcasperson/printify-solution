@@ -4,7 +4,6 @@ const products = {
   C: 2.33,
 }
 
-// Ordered from highest to lowest
 const validCoinValues: number[] = [50, 20, 10, 5, 2, 1]
 
 const validateCommand = (command: string) => {
@@ -52,6 +51,8 @@ export function getVendingResult(command: string): {
   const changeDue = parseFloat((totalMoneyGiven - priceOfProduct).toFixed(2))
   let remainingChangeDue = changeDue
   let coinsForChange: number[] = []
+  // Ensure they are ordered from highest to lowest
+  validCoinValues.sort(function (a, b) { return b - a; })
   for (const coinValue of validCoinValues) {
     let coinValueDecimal = parseFloat((coinValue / 100).toFixed(2))
     while (remainingChangeDue >= coinValueDecimal) {
