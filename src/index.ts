@@ -1,4 +1,4 @@
-const products = {
+const products: { [product: string]: number } = {
   A: 0.95,
   B: 1.26,
   C: 2.33,
@@ -6,7 +6,7 @@ const products = {
 
 const validCoinValues: number[] = [50, 20, 10, 5, 2, 1]
 
-const validateCommand = (command: string) => {
+const validateCommand = (command: string): [string, string[]] => {
   const parts = command.split(" ")
   // Last character needs to be in Products
   const product = parts[parts.length - 1]
@@ -26,25 +26,25 @@ const validateCommand = (command: string) => {
       throw new Error(`Coin value is not a valid number: '${coin}'`)
     }
   }
+  return [product, coins]
 }
 
 export function getVendingResult(command: string): {
   change: string | null;
   product: string | null;
 } {
-  validateCommand(command)
+  const [product, coins] = validateCommand(command)
 
-  const parts = command.split(" ")
-  const product = parts[parts.length - 1]
-  const coins = parts.slice(0, -1)
   let totalMoneyGiven: number = 0
   for (const coin of coins) {
     totalMoneyGiven += parseInt(coin) / 100
   }
-  const priceOfProduct: number = products[product as keyof typeof products]
-  // Make sure we have enough money to buy the product
-  let insufficientFunds: boolean = totalMoneyGiven < priceOfProduct
-  if (insufficientFunds) {
+  totalMoneyGiven = parseFloat(totalMoneyGiven.toFixed(2))
+  const priceOfProduct: number = products[product]
+
+  // If not enough money was given, return the exact coins that were given
+  let insufficientMoney: boolean = totalMoneyGiven < priceOfProduct
+  if (insufficientMoney) {
     return { change: coins.join(" "), product: null }
   }
 
