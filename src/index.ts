@@ -29,26 +29,7 @@ const validateCommand = (command: string): [string, string[]] => {
   return [product, coins]
 }
 
-export function getVendingResult(command: string): {
-  change: string | null;
-  product: string | null;
-} {
-  const [product, coins] = validateCommand(command)
-
-  let totalMoneyGiven: number = 0
-  for (const coin of coins) {
-    totalMoneyGiven += parseInt(coin) / 100
-  }
-  totalMoneyGiven = parseFloat(totalMoneyGiven.toFixed(2))
-  const priceOfProduct: number = products[product]
-
-  // If not enough money was given, return the exact coins that were given
-  let insufficientMoney: boolean = totalMoneyGiven < priceOfProduct
-  if (insufficientMoney) {
-    return { change: coins.join(" "), product: null }
-  }
-
-  const changeDue = parseFloat((totalMoneyGiven - priceOfProduct).toFixed(2))
+const calculateChangeDue = (changeDue: number): string | null => {
   let remainingChangeDue = changeDue
   let coinsForChange: number[] = []
   // Ensure they are ordered from highest to lowest
@@ -63,6 +44,31 @@ export function getVendingResult(command: string): {
   }
 
   const changeStr = coinsForChange.join(" ")
+  return changeStr ? changeStr : null
+}
 
-  return { change: changeStr ? changeStr : null, product: product };
+export function getVendingResult(command: string): {
+  change: string | null;
+  product: string | null;
+} {
+  const [product, coins] = validateCommand(command)
+
+  let totalMoneyGiven: number = 0
+  for (const coin of coins) {
+    totalMoneyGiven += parseInt(coin) / 100
+  }
+  totalMoneyGiven = parseFloat(totalMoneyGiven.toFixed(2))
+  const priceOfProduct: number = products[product]
+
+  // If not enough money was given, return the exact coins that were given
+  // and not necessarily the least amount of coins of the same amount.
+  let insufficientMoney: boolean = totalMoneyGiven < priceOfProduct
+  if (insufficientMoney) {
+    return { change: coins.join(" "), product: null }
+  }
+
+  const amountDue = parseFloat((totalMoneyGiven - priceOfProduct).toFixed(2))
+  const change = calculateChangeDue(amountDue)
+
+  return { change, product };
 }
