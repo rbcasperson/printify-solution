@@ -2,11 +2,13 @@ import { getVendingResult } from './index';
 
 describe('getVendingResult', () => {
   const validCases = [
-    // Typical Case
+    // Typical Cases
     ["Requires Change - A", "50 50 20 20 A", "A", "20 20 5"],
     ["Requires Change - B", "50 50 20 20 B", "B", "10 2 2"],
     ["Requires Change - C", "50 50 50 50 50 20 C", "C", "20 10 5 2"],
-    // TODO - more test cases
+    // Edge Cases
+    ["Far too much money provided", "50 50 50 50 50 50 50 50 50 50 50 50 50 20 20 20 20 20 20 20 20 20 20 10 10 10 10 10 10 5 5 5 5 2 2 2 2 1 1 1 1 A", "A", "50 50 50 50 50 50 50 50 50 50 50 50 50 50 50 50 20 20 5 2"],
+    ["Just one cent over", "50 50 20 5 1 1 B", "B", "1"]
   ]
 
   it.each(validCases)("should return the product bought and the correct change with the least amount of coins for a valid command: %p", (testCaseDescription: string, command: string, expectedProduct: string, expectedChange: string) => {
