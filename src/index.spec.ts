@@ -28,8 +28,7 @@ describe('getVendingResult', () => {
     // Valid coins, but invalid product
     ["Invalid product: 'Q'", "1 2 50 Q"],
     // Valid product, but invalid coins
-    // ["Coin value is not a number: 'A'", "A 2 50 A"],
-    // ["Coin value is not a number: 'A'", ".5 2 50 Q"],
+    ["Coin value is not a number: 'A'", "A 2 50 A"],
   ]
   it.each(invalidCommands)("should throw an error containing '%p' with the command '%p'", (expectedError: string, command: string) => {
     expect(() => {
@@ -37,7 +36,4 @@ describe('getVendingResult', () => {
     }).toThrow(expectedError)
   })
 
-
-  // TODO
-  // Any other cases?
 });
